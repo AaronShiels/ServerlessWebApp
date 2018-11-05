@@ -1,0 +1,7 @@
+{
+	"rules": {
+		"linebreak-style": false,
+		"missing-jsdoc": false,
+		"quotemark": [true, "double", "avoid-escape"]
+	}
+}

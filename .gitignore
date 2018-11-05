@@ -1,3 +1,8 @@
+# Custom
+wwwroot/
+dist/
+.serverless/
+
 # Logs
 logs
 *.log
