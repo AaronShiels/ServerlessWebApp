@@ -10,8 +10,20 @@ package:
     include: src/server/**
 
 functions:
-    test:
-        handler: src/server/test.handler
+    default:
+        handler: src/server/default.handler
         events:
             - http: ANY /
             - http: "ANY {proxy+}"
+    getGames:
+        handler: src/server/getGames.handler
+        events:
+            - http: GET /games
+
+custom:
+    webpack:
+        webpackConfig: ./webpack.server.config.js
+
+plugins:
+    - serverless-webpack
+    - serverless-offline
