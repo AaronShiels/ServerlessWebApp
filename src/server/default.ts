@@ -1,5 +1,6 @@
-import serverless from "serverless-http";
-import express from "express";
+import express from 'express';
+import serverless from 'serverless-http';
+
 const app = express();
 
 app.get("/", function(req, res) {

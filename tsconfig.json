@@ -1,7 +1,5 @@
 {
 	"compilerOptions": {
-		//"baseUrl": "./",
-		//"outDir": "./dist/",
 		"sourceMap": true,
 		"noImplicitAny": true,
 		"strictNullChecks": true,
@@ -9,10 +7,11 @@
 		"strict": true,
 		"module": "esnext",
 		"moduleResolution": "node",
+		"esModuleInterop": true,
 		"pretty": true,
 		"target": "es5",
 		"jsx": "react",
-		"typeRoots": ["types"],
+		"typeRoots": ["types/*"],
 		"lib": ["es7", "dom"]
 	},
 	"include": ["./src/**/*"],
