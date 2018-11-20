@@ -2,6 +2,7 @@
 wwwroot/
 dist/
 .serverless/
+.dynamodb/
 
 # Logs
 logs
