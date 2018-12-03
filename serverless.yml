@@ -29,15 +29,18 @@ package:
 
 functions:
   default:
-    handler: src/server/functions/default.handler
+    handler: src/server/handlers/default.default
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
-  getGames:
-    handler: src/server/functions/games.handler
+  getGame:
+    handler: src/server/handlers/getGame.default
     events:
-      - http: GET /games
       - http: "GET /games/{proxy+}"
+  updateGame:
+    handler: src/server/handlers/updateGame.default
+    events:
+      - http: "POST /games/{proxy+}"
 
 resources:
   Resources:
@@ -47,7 +50,7 @@ resources:
         TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: id
-            AttributeType: N
+            AttributeType: S
           - AttributeName: gameKey
             AttributeType: S
         KeySchema:

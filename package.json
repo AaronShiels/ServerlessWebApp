@@ -24,6 +24,7 @@
 		"react": "^16.5.2",
 		"react-dom": "^16.5.2",
 		"react-router-dom": "^4.3.1",
+		"redux": "^4.0.1",
 		"serverless": "^1.32.0",
 		"serverless-webpack": "^5.2.0",
 		"style-loader": "^0.23.1",
