@@ -15,7 +15,7 @@ const siteNav: React.SFC = () => (
 	<AppBar position="static" color="primary">
 		<Toolbar>
 			<Typography variant="h6" color="inherit" style={styles}>
-				Test
+				Hello
 			</Typography>
 			<Button color="inherit">Login</Button>
 			<Button color="inherit">Sign Up</Button>

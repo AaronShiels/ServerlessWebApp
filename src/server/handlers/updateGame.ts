@@ -1,19 +1,19 @@
-import GameAction from '../../shared/game/actions';
-import reducer from '../../shared/game/reducer';
+import GameAction from '../../common/game/actions';
+import reducer from '../../common/game/reducer';
 import {
-    ApiRequest,
-    ApiResponse,
-    badRequest,
-    createApiHandler,
-    notFound,
-    ok
-    } from '../utilities/api';
+	ApiRequest,
+	ApiResponse,
+	badRequest,
+	createApiHandler,
+	notFound,
+	ok
+	} from '../framework/api';
 import {
-    getGameByKey,
-    IGameData,
-    newGame,
-    updateGameById
-    } from '../utilities/gamesRepository';
+	getGameByKey,
+	IGameData,
+	newGame,
+	updateGameById
+	} from '../framework/gamesRepository';
 
 async function handler(req: ApiRequest): Promise<ApiResponse> {
 	if (!req.pathParameters || !req.pathParameters.proxy || !req.body) {

@@ -5,8 +5,8 @@ import {
 	createApiHandler,
 	notFound,
 	ok
-	} from '../utilities/api';
-import { getGameByKey, IGameData } from '../utilities/gamesRepository';
+	} from '../framework/api';
+import { getGameByKey, IGameData } from '../framework/gamesRepository';
 
 async function handler(req: ApiRequest): Promise<ApiResponse> {
 	if (!req.pathParameters || !req.pathParameters.proxy) {

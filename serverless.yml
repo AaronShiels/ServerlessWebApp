@@ -1,84 +1,56 @@
-service: serverlesswebapp
-
-provider:
-  name: aws
-  runtime: nodejs8.10
-  stage: dev
-  region: us-east-1
-  environment:
-    GAMES_TABLE: ${self:custom.tableName}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GAMES_TABLE}"
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GAMES_TABLE}/index/*"
-
-package:
-  include: src/server/**
-  exclude: node_modules/**/*
-
-functions:
-  default:
-    handler: src/server/handlers/default.default
-    events:
-      - http: ANY /
-      - http: "ANY {proxy+}"
-  getGame:
-    handler: src/server/handlers/getGame.default
-    events:
-      - http: "GET /games/{proxy+}"
-  updateGame:
-    handler: src/server/handlers/updateGame.default
-    events:
-      - http: "POST /games/{proxy+}"
-
-resources:
-  Resources:
-    gamesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.tableName}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: gameKey
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        GlobalSecondaryIndexes:
-          - IndexName: gameKeyIndex
-            KeySchema:
-              - AttributeName: gameKey
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-
-custom:
-  tableName: "gamesTable-${self:provider.stage}"
-  dynamodb:
-    start:
-      migrate: true
-  webpack:
-    webpackConfig: ./webpack.server.config.js
-
-plugins:
-  - serverless-webpack
-  - serverless-dynamodb-local
-  - serverless-offline
+{
+	"service": "aaronshiels-server",
+	"provider": {
+		"name": "aws",
+		"runtime": "nodejs8.10",
+		"stage": "dev",
+		"region": "us-east-1",
+		"environment": { "GAMES_TABLE": "${self:custom.tableName}" },
+		"iamRoleStatements": [
+			{
+				"Effect": "Allow",
+				"Action": ["dynamodb:Query", "dynamodb:Scan", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem"],
+				"Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GAMES_TABLE}"
+			},
+			{
+				"Effect": "Allow",
+				"Action": ["dynamodb:Query", "dynamodb:Scan"],
+				"Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GAMES_TABLE}/index/*"
+			}
+		]
+	},
+	"package": { "include": "src/server/**", "exclude": "node_modules/**/*" },
+	"functions": {
+		"default": { "handler": "src/server/handlers/default.default", "events": [{ "http": "ANY /" }, { "http": "ANY {proxy+}" }] },
+		"getGame": { "handler": "src/server/handlers/getGame.default", "events": [{ "http": "GET /games/{proxy+}" }] },
+		"updateGame": { "handler": "src/server/handlers/updateGame.default", "events": [{ "http": "POST /games/{proxy+}" }] }
+	},
+	"resources": {
+		"Resources": {
+			"gamesTable": {
+				"Type": "AWS::DynamoDB::Table",
+				"Properties": {
+					"TableName": "${self:custom.tableName}",
+					"AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }, { "AttributeName": "gameKey", "AttributeType": "S" }],
+					"KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+					"ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 },
+					"GlobalSecondaryIndexes": [
+						{
+							"IndexName": "gameKeyIndex",
+							"KeySchema": [{ "AttributeName": "gameKey", "KeyType": "HASH" }],
+							"Projection": { "ProjectionType": "ALL" },
+							"ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 }
+						}
+					]
+				}
+			}
+		}
+	},
+	"custom": {
+		"tableName": "aaronshiels-tables-games-${self:provider.stage}",
+		"dynamodb": { "start": { "migrate": true } },
+		"webpack": { "webpackConfig": "./webpack.server.config.js" },
+		"client": { "bucketName": "aaronshiels-client", "distributionFolder": "dist/client" }
+	},
+	"plugins": ["serverless-webpack", "serverless-dynamodb-local", "serverless-offline", "serverless-finch"]
+}

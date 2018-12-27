@@ -3,11 +3,11 @@
 	"version": "1.0.0",
 	"scripts": {
 		"server:credentials": "serverless config credentials --provider aws --key X --secret X",
+		"server:test:install": "serverless dynamodb install",
+		"server:test": "serverless offline start",
 		"server:deploy": "serverless deploy",
-		"server:offline:start": "serverless offline start",
-		"server:offline:install": "serverless dynamodb install",
-		"client:build": "webpack --config webpack.client.config.js --mode production",
-		"client:start": "webpack-dev-server --config webpack.client.config.js --mode development"
+		"client:test": "webpack-dev-server --config webpack.client.config.js --mode development",
+		"client:deploy": "webpack --config webpack.client.config.js --mode production && serverless client deploy"
 	},
 	"author": "ashiels",
 	"license": "ISC",
@@ -25,7 +25,8 @@
 		"react-dom": "^16.5.2",
 		"react-router-dom": "^4.3.1",
 		"redux": "^4.0.1",
-		"serverless": "^1.32.0",
+		"serverless": "^1.35.1",
+		"serverless-finch": "^2.3.2",
 		"serverless-webpack": "^5.2.0",
 		"style-loader": "^0.23.1",
 		"url-loader": "^1.1.2",
@@ -40,7 +41,7 @@
 		"@types/react-dom": "^16.0.9",
 		"@types/react-router-dom": "^4.3.1",
 		"serverless-dynamodb-local": "^0.2.35",
-		"serverless-offline": "^3.31.0",
+		"serverless-offline": "^3.31.3",
 		"source-map-loader": "^0.2.4",
 		"ts-loader": "^5.2.2",
 		"tslint": "^5.11.0",
@@ -48,6 +49,6 @@
 		"tslint-microsoft-contrib": "^5.2.1",
 		"typescript": "^3.1.3",
 		"webpack-cli": "^3.1.2",
-		"webpack-dev-server": "^3.1.9"
+		"webpack-dev-server": "^3.1.14"
 	}
 }

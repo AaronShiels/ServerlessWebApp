@@ -1,9 +1,9 @@
 import AWS from 'aws-sdk';
-import GameAction from '../../shared/game/actions';
-import guid from '../../shared/guid';
+import GameAction from '../../common/game/actions';
+import guid from '../../common/utilities/guid';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { IGameState } from '../../shared/game';
-import { initialState } from '../../shared/game/reducer';
+import { IGameState } from '../../common/game';
+import { initialState } from '../../common/game/reducer';
 
 export interface IGameData {
 	id: string;

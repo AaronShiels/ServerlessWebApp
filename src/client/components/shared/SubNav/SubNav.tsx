@@ -15,7 +15,7 @@ const subNav: React.SFC = () => (
 	<AppBar position="static" color="primary" style={subNavStyles}>
 		<Toolbar style={toolbarStyles}>
 			<Button component={createButtonLink("/test")} color="inherit">
-				Test
+				World
 			</Button>
 		</Toolbar>
 	</AppBar>

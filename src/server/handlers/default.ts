@@ -1,10 +1,12 @@
-import { ApiRequest, ApiResponse, createApiHandler } from '../utilities/api';
+import {
+	ApiRequest,
+	ApiResponse,
+	createApiHandler,
+	ok
+	} from '../framework/api';
 
 async function handler(req: ApiRequest): Promise<ApiResponse> {
-	return {
-		statusCode: 200,
-		body: "hello world",
-	};
+	return ok("Hello world");
 }
 
 export default createApiHandler(handler);
