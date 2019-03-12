@@ -1,12 +1,5 @@
-import {
-	ApiRequest,
-	ApiResponse,
-	createApiHandler,
-	ok
-	} from '../framework/api';
+import { ok, ApiHandler } from "../framework/api";
 
-async function handler(req: ApiRequest): Promise<ApiResponse> {
-	return ok("Hello world");
-}
+const handler: ApiHandler = async () => ok("Hello world");
 
-export default createApiHandler(handler);
+export default handler;

@@ -1,20 +1,10 @@
 {
 	"compilerOptions": {
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"pretty": true,
-		"target": "es5",
 		"jsx": "react",
-		"types": ["node"],
-		"typeRoots": ["types/*"],
-		"lib": ["es7", "dom"]
+		"lib": ["dom", "esnext"],
+		"sourceMap": true,
+		"strict": true,
+		"target": "es5"
 	},
-	"include": ["./src/**/*"],
-	"exclude": ["node_modules"]
+	"include": ["./src/**/*"]
 }

@@ -1,9 +1,9 @@
-import AWS from 'aws-sdk';
-import GameAction from '../../common/game/actions';
-import guid from '../../common/utilities/guid';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { IGameState } from '../../common/game';
-import { initialState } from '../../common/game/reducer';
+import { DynamoDB } from "aws-sdk";
+import GameAction from "../../common/game/actions";
+import guid from "../../common/utilities/guid";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
+import { IGameState } from "../../common/game";
+import { initialState } from "../../common/game/reducer";
 
 export interface IGameData {
 	id: string;
@@ -24,11 +24,8 @@ export function newGame(): IGameData {
 }
 
 const database: DocumentClient = process.env.IS_OFFLINE
-	? new AWS.DynamoDB.DocumentClient({
-			region: "localhost",
-			endpoint: "http://localhost:8000",
-	  })
-	: new AWS.DynamoDB.DocumentClient();
+	? new DynamoDB.DocumentClient({ region: "localhost", endpoint: "http://localhost:8000" })
+	: new DynamoDB.DocumentClient();
 
 const gameTable: string = process.env.GAMES_TABLE || "";
 

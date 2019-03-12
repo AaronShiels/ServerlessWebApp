@@ -43,6 +43,46 @@
 						}
 					]
 				}
+			},
+			"cloudFrontDistribution": {
+				"Type": "AWS::CloudFront::Distribution",
+				"Properties": {
+					"DistributionConfig": {
+						"DefaultCacheBehavior": {
+							"TargetOriginId": "${self:custom.distribution.name}",
+							"ViewerProtocolPolicy": "redirect-to-https",
+							"DefaultTTL": 30,
+							"ForwardedValues": {
+								"QueryString": true
+							}
+						},
+						"Enabled": true,
+						"Origins": [
+							{
+								"Id": "${self:custom.distribution.name}-api-origin",
+								"DomainName": {
+									"Fn::Join": [
+										".",
+										[
+											{
+												"Ref": "ApiGatewayRestApi"
+											}
+										],
+										"execute-api",
+										"us-east-1",
+										"amazonaws.com"
+									]
+								},
+								"OriginPath": "/{self:provider.stage}",
+								"CustomOriginConfig": {
+									"HTTPPort": 80,
+									"HTTPSPort": 443,
+									"OriginProtocolPolicy": "https-only"
+								}
+							}
+						]
+					}
+				}
 			}
 		}
 	},
@@ -50,7 +90,8 @@
 		"tableName": "aaronshiels-tables-games-${self:provider.stage}",
 		"dynamodb": { "start": { "migrate": true } },
 		"webpack": { "webpackConfig": "./webpack.server.config.js" },
-		"client": { "bucketName": "aaronshiels-client", "distributionFolder": "dist/client" }
+		"client": { "bucketName": "aaronshiels-client", "distributionFolder": "dist/client" },
+		"distribution": { "name": "aaronshiels-distribution-${self:provider.stage}" }
 	},
 	"plugins": ["serverless-webpack", "serverless-dynamodb-local", "serverless-offline", "serverless-finch"]
 }

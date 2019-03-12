@@ -18,7 +18,6 @@ const config = {
 	module: {
 		rules: [
 			{ test: /\.tsx?$/, loader: "ts-loader" },
-			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 			{ test: /\.css$/, use: ["style-loader", "css-loader"] },
 			{ test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader", options: { limit: 65000, mimetype: "application/font-woff" } },
 			{ test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader", options: { limit: 65000, mimetype: "application/octet-stream" } },
@@ -31,26 +30,29 @@ const config = {
 	plugins: [new CopyWebpackPlugin([{ from: "src/client/index.html" }])],
 
 	devServer: {
-		//contentBase: path.resolve(__dirname, "/dist/client/"),
+		contentBase: path.resolve(__dirname, "/dist/client/"),
 		publicPath: "/",
 
 		compress: true,
-		host: "0.0.0.0",
+		//host: "0.0.0.0",
 		port: 9000,
+		https: false,
 		disableHostCheck: true,
+		historyApiFallback: { rewrites: [{ from: /^(?!\/api).*$/, to: "/index.html" }] },
 
 		stats: "errors-only",
 
 		index: "index.html",
+		open: true,
+
 		proxy: {
 			"/api": {
-				target: "http://test.com",
+				target: "http://localhost:3000",
 				secure: false,
 				changeOrigin: true,
 				pathRewrite: { "^/api": "" },
 			},
 		},
-		//historyApiFallback: { rewrites: [{ from: /^(?!\/api).*$/, to: "/index.html" }] },
 	},
 };
 

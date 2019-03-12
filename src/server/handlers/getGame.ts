@@ -1,25 +1,18 @@
-import {
-	ApiRequest,
-	ApiResponse,
-	badRequest,
-	createApiHandler,
-	notFound,
-	ok
-	} from '../framework/api';
-import { getGameByKey, IGameData } from '../framework/gamesRepository';
+import { badRequest, notFound, ok, ApiHandler } from "../framework/api";
+import { getGameByKey, IGameData } from "../framework/gamesRepository";
 
-async function handler(req: ApiRequest): Promise<ApiResponse> {
-	if (!req.pathParameters || !req.pathParameters.proxy) {
+const handler: ApiHandler = async ({ pathParameters }) => {
+	if (!pathParameters || !pathParameters.proxy) {
 		return badRequest();
 	}
 
-	const gameKey: string = req.pathParameters.proxy;
+	const gameKey: string = pathParameters.proxy;
 	const game: IGameData | undefined = await getGameByKey(gameKey);
 	if (game) {
 		return ok(game);
 	} else {
 		return notFound();
 	}
-}
+};
 
-export default createApiHandler(handler);
+export default handler;

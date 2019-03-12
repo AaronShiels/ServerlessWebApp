@@ -10,14 +10,14 @@ const config = {
 		filename: "[name].js",
 	},
 
-	devtool: "source-map",
+	devtool: "inline-source-map",
 
 	resolve: {
 		extensions: [".ts", ".js"],
 	},
 
 	module: {
-		rules: [{ test: /\.ts/, loader: "ts-loader" }, { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }],
+		rules: [{ test: /\.ts/, loader: "ts-loader" }],
 	},
 };
 

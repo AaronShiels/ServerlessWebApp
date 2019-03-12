@@ -1,13 +1,9 @@
-import * as Lambda from 'aws-lambda';
+import * as Lambda from "aws-lambda";
 
-export type ApiRequest = Lambda.APIGatewayProxyEvent;
-export type ApiResponse = Lambda.APIGatewayProxyResult;
-export type ApiContext = Lambda.APIGatewayEventRequestContext;
+type ApiRequest = Lambda.APIGatewayProxyEvent;
+type ApiResponse = Lambda.APIGatewayProxyResult;
+type ApiContext = Lambda.APIGatewayEventRequestContext;
 export type ApiHandler = (req: ApiRequest, ctx: ApiContext) => Promise<ApiResponse>;
-
-export function createApiHandler(handler: ApiHandler): ApiHandler {
-	return handler;
-}
 
 export function ok(payload?: object | string): ApiResponse {
 	let body: string = "";
