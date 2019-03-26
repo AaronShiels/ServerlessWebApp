@@ -49,36 +49,47 @@
 				"Properties": {
 					"DistributionConfig": {
 						"DefaultCacheBehavior": {
-							"TargetOriginId": "${self:custom.distribution.name}",
+							"TargetOriginId": "${self:custom.distribution.name}-s3-origin",
 							"ViewerProtocolPolicy": "redirect-to-https",
-							"DefaultTTL": 30,
 							"ForwardedValues": {
 								"QueryString": true
 							}
 						},
+						"CacheBehaviors": [
+							{
+								"AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+								"CachedMethods": ["HEAD", "GET", "OPTIONS"],
+								"Compress": true,
+								"ForwardedValues": {
+									"Headers": ["Accept", "Referer", "Authorization", "Content-Type"],
+									"QueryString": true
+								},
+								"PathPattern": "/api/*",
+								"TargetOriginId": "${self:custom.distribution.name}-api-origin",
+								"ViewerProtocolPolicy": "https-only"
+							}
+						],
+						"DefaultRootObject": "index.html",
 						"Enabled": true,
 						"Origins": [
 							{
 								"Id": "${self:custom.distribution.name}-api-origin",
 								"DomainName": {
-									"Fn::Join": [
-										".",
-										[
-											{
-												"Ref": "ApiGatewayRestApi"
-											}
-										],
-										"execute-api",
-										"us-east-1",
-										"amazonaws.com"
-									]
+									"Fn::Join": [".", [{ "Ref": "ApiGatewayRestApi" }, "execute-api", "us-east-1", "amazonaws.com"]]
 								},
-								"OriginPath": "/{self:provider.stage}",
+								"OriginPath": "/${self:provider.stage}",
 								"CustomOriginConfig": {
-									"HTTPPort": 80,
 									"HTTPSPort": 443,
 									"OriginProtocolPolicy": "https-only"
 								}
+							},
+							{
+								"DomainName": {
+									"Fn::Join": [".", [{ "Ref": "ServerlessDeploymentBucket" }, "s3.amazonaws.com"]]
+								},
+								"Id": "${self:custom.distribution.name}-s3-origin",
+								"OriginPath": "",
+								"S3OriginConfig": {}
 							}
 						]
 					}
