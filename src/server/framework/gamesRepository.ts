@@ -27,11 +27,11 @@ const database: DocumentClient = process.env.IS_OFFLINE
 	? new DynamoDB.DocumentClient({ region: "localhost", endpoint: "http://localhost:8000" })
 	: new DynamoDB.DocumentClient();
 
-const gameTable: string = process.env.GAMES_TABLE || "";
+const tableName: string = process.env.TABLE || "";
 
 export function getGameByKey(gameKey: string): Promise<IGameData | undefined> {
 	const params: DocumentClient.QueryInput = {
-		TableName: gameTable,
+		TableName: tableName,
 		IndexName: "gameKeyIndex",
 		KeyConditionExpression: "gameKey = :gameKey",
 		ExpressionAttributeValues: {
@@ -55,7 +55,7 @@ export function getGameByKey(gameKey: string): Promise<IGameData | undefined> {
 
 export function updateGameById(updatedGameData: IGameData): Promise<void> {
 	const params: DocumentClient.UpdateItemInput = {
-		TableName: gameTable,
+		TableName: tableName,
 		Key: {
 			id: updatedGameData.id,
 		},

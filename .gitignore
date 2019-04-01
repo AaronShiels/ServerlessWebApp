@@ -3,6 +3,7 @@ wwwroot/
 dist/
 .serverless/
 .dynamodb/
+package-lock.json
 
 # Logs
 logs
