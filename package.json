@@ -2,12 +2,12 @@
 	"name": "serverlesswebapp",
 	"version": "1.0.0",
 	"scripts": {
-		"server:credentials": "serverless config credentials --provider aws --key X --secret X",
-		"server:install": "serverless dynamodb install",
-		"server:run": "serverless offline start",
-		"server:deploy": "serverless deploy",
-		"client:run": "webpack-dev-server --config webpack.client.config.js --mode development",
-		"client:deploy": "webpack --config webpack.client.config.js --mode production && serverless client deploy"
+		"run:server:install": "sls dynamodb install",
+		"run:server": "sls offline start",
+		"run:client": "webpack-dev-server --config webpack.client.config.js --mode development",
+		"deploy:configure": "sls config credentials --provider aws --key $AWS_ACCESS_KEY --secret $AWS_ACCESS_SECRET",
+		"deploy:server": "sls deploy",
+		"deploy:client": "webpack --config webpack.client.config.js --mode production && sls client deploy"
 	},
 	"author": "ashiels",
 	"license": "ISC",
