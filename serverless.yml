@@ -1,116 +1,87 @@
 {
-    "service": "aaronshiels-server",
-    "provider":
-        {
-            "name": "aws",
-            "runtime": "nodejs8.10",
-            "stage": "dev",
-            "region": "us-east-1",
-            "environment": { "TABLE": "${self:provider.stage}-aaronshiels-table" },
-            "iamRoleStatements":
-                [
-                    {
-                        "Effect": "Allow",
-                        "Action": ["dynamodb:Query", "dynamodb:Scan", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem"],
-                        "Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-aaronshiels-table",
-                    },
-                    {
-                        "Effect": "Allow",
-                        "Action": ["dynamodb:Query", "dynamodb:Scan"],
-                        "Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-aaronshiels-table/index/*",
-                    },
-                ],
-        },
-    "package": { "include": "src/server/**", "exclude": "node_modules/**/*" },
-    "functions":
-        {
-            "default": { "handler": "src/server/handlers/default.default", "events": [{ "http": "ANY /" }, { "http": "ANY {proxy+}" }] },
-            "getGame": { "handler": "src/server/handlers/getGame.default", "events": [{ "http": "GET /games/{proxy+}" }] },
-            "updateGame": { "handler": "src/server/handlers/updateGame.default", "events": [{ "http": "POST /games/{proxy+}" }] },
-        },
-    "resources":
-        {
-            "Resources":
-                {
-                    "table":
-                        {
-                            "Type": "AWS::DynamoDB::Table",
-                            "Properties":
-                                {
-                                    "TableName": "${self:provider.stage}-aaronshiels-table",
-                                    "AttributeDefinitions":
-                                        [{ "AttributeName": "id", "AttributeType": "S" }, { "AttributeName": "gameKey", "AttributeType": "S" }],
-                                    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
-                                    "ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 },
-                                    "GlobalSecondaryIndexes":
-                                        [
-                                            {
-                                                "IndexName": "gameKeyIndex",
-                                                "KeySchema": [{ "AttributeName": "gameKey", "KeyType": "HASH" }],
-                                                "Projection": { "ProjectionType": "ALL" },
-                                                "ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 },
-                                            },
-                                        ],
-                                },
-                        },
-                    "cloudFrontDistribution":
-                        {
-                            "Type": "AWS::CloudFront::Distribution",
-                            "Properties":
-                                {
-                                    "DistributionConfig":
-                                        {
-                                            "DefaultCacheBehavior":
-                                                {
-                                                    "TargetOriginId": "${self:provider.stage}-aaronshiels-distribution-s3-origin",
-                                                    "ViewerProtocolPolicy": "redirect-to-https",
-                                                    "ForwardedValues": { "QueryString": true },
-                                                },
-                                            "CacheBehaviors":
-                                                [
-                                                    {
-                                                        "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
-                                                        "CachedMethods": ["HEAD", "GET", "OPTIONS"],
-                                                        "Compress": true,
-                                                        "ForwardedValues":
-                                                            { "Headers": ["Accept", "Referer", "Authorization", "Content-Type"], "QueryString": true },
-                                                        "PathPattern": "/api/*",
-                                                        "TargetOriginId": "${self:provider.stage}-aaronshiels-distribution-api-origin",
-                                                        "ViewerProtocolPolicy": "https-only",
-                                                    },
-                                                ],
-                                            "DefaultRootObject": "index.html",
-                                            "Enabled": true,
-                                            "Origins":
-                                                [
-                                                    {
-                                                        "Id": "${self:provider.stage}-aaronshiels-distribution-api-origin",
-                                                        "DomainName":
-                                                            {
-                                                                "Fn::Join":
-                                                                    [".", [{ "Ref": "ApiGatewayRestApi" }, "execute-api", "us-east-1", "amazonaws.com"]],
-                                                            },
-                                                        "OriginPath": "/${self:provider.stage}",
-                                                        "CustomOriginConfig": { "HTTPSPort": 443, "OriginProtocolPolicy": "https-only" },
-                                                    },
-                                                    {
-                                                        "DomainName":
-                                                            { "Fn::Join": [".", ["${self:provider.stage}-aaronshiels-client", "s3", "amazonaws.com"]] },
-                                                        "Id": "${self:provider.stage}-aaronshiels-distribution-s3-origin",
-                                                        "OriginPath": "",
-                                                        "S3OriginConfig": {},
-                                                    },
-                                                ],
-                                        },
-                                },
-                        },
-                },
-        },
-    "custom":
-        {
-            "dynamodb": { "start": { "migrate": true } },
-            "webpack": { "webpackConfig": "./webpack.server.config.js" },
-            "client": { "bucketName": "${self:provider.stage}-aaronshiels-client", "distributionFolder": "dist/client" },
-        },
-    "plugins": ["serverless-webpack", "serverless-dynamodb-local", "serverless-offline", "serverless-finch"],
+	"service": "aaronshiels-server",
+	"provider": {
+		"name": "aws",
+		"runtime": "nodejs8.10",
+		"stage": "dev",
+		"region": "us-east-1",
+		"environment": { "TABLE": "${self:provider.stage}-aaronshiels-table" },
+		"iamRoleStatements": [
+			{
+				"Effect": "Allow",
+				"Action": ["dynamodb:Query", "dynamodb:Scan", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem"],
+				"Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-aaronshiels-table"
+			},
+			{
+				"Effect": "Allow",
+				"Action": ["dynamodb:Query", "dynamodb:Scan"],
+				"Resource": "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-aaronshiels-table/index/*"
+			}
+		]
+	},
+	"package": { "include": "src/server/**", "exclude": "node_modules/**/*" },
+	"functions": {
+		"getInventory": { "handler": "src/server/handlers/getInventory.default", "events": [{ "http": "GET /inventories/{proxy+}" }] },
+		"updateInventory": { "handler": "src/server/handlers/updateInventory.default", "events": [{ "http": "POST /inventories/{proxy+}" }] }
+	},
+	"resources": {
+		"Resources": {
+			"table": {
+				"Type": "AWS::DynamoDB::Table",
+				"Properties": {
+					"TableName": "${self:provider.stage}-aaronshiels-table",
+					"AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+					"KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+					"ProvisionedThroughput": { "ReadCapacityUnits": 1, "WriteCapacityUnits": 1 }
+				}
+			},
+			"cloudFrontDistribution": {
+				"Type": "AWS::CloudFront::Distribution",
+				"Properties": {
+					"DistributionConfig": {
+						"DefaultCacheBehavior": {
+							"TargetOriginId": "${self:provider.stage}-aaronshiels-distribution-s3-origin",
+							"ViewerProtocolPolicy": "redirect-to-https",
+							"ForwardedValues": { "QueryString": true }
+						},
+						"CacheBehaviors": [
+							{
+								"AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+								"CachedMethods": ["HEAD", "GET", "OPTIONS"],
+								"Compress": true,
+								"ForwardedValues": { "Headers": ["Accept", "Referer", "Authorization", "Content-Type"], "QueryString": true },
+								"PathPattern": "/api/*",
+								"TargetOriginId": "${self:provider.stage}-aaronshiels-distribution-api-origin",
+								"ViewerProtocolPolicy": "https-only"
+							}
+						],
+						"DefaultRootObject": "index.html",
+						"Enabled": true,
+						"Origins": [
+							{
+								"Id": "${self:provider.stage}-aaronshiels-distribution-api-origin",
+								"DomainName": {
+									"Fn::Join": [".", [{ "Ref": "ApiGatewayRestApi" }, "execute-api", "us-east-1", "amazonaws.com"]]
+								},
+								"OriginPath": "/${self:provider.stage}",
+								"CustomOriginConfig": { "HTTPSPort": 443, "OriginProtocolPolicy": "https-only" }
+							},
+							{
+								"DomainName": { "Fn::Join": [".", ["${self:provider.stage}-aaronshiels-client", "s3", "amazonaws.com"]] },
+								"Id": "${self:provider.stage}-aaronshiels-distribution-s3-origin",
+								"OriginPath": "",
+								"S3OriginConfig": {}
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	"custom": {
+		"dynamodb": { "start": { "migrate": true } },
+		"webpack": { "webpackConfig": "./webpack.server.config.js" },
+		"client": { "bucketName": "${self:provider.stage}-aaronshiels-client", "distributionFolder": "dist/client" }
+	},
+	"plugins": ["serverless-webpack", "serverless-dynamodb-local", "serverless-offline", "serverless-finch"]
 }

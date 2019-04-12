@@ -6,6 +6,10 @@ const handler: ApiHandler = async ({ pathParameters }) => {
 		return badRequest();
 	}
 
+	if (pathParameters.proxy != "demo") {
+		return badRequest(); // Temporary
+	}
+
 	const inventory = await getInventory(pathParameters.proxy);
 	if (inventory) {
 		return ok(inventory);

@@ -1,5 +1,5 @@
 import { DynamoDB } from "aws-sdk";
-import Inventory from "../../common/contracts/Inventory";
+import IInventory from "../../common/contracts/IInventory";
 
 const database = process.env.IS_OFFLINE
 	? new DynamoDB.DocumentClient({ region: "localhost", endpoint: "http://localhost:8000" })
@@ -7,21 +7,21 @@ const database = process.env.IS_OFFLINE
 
 const tableName: string = process.env.TABLE || "";
 
-export function getInventory(id: string): Promise<Inventory | undefined> {
+export function getInventory(id: string): Promise<IInventory | undefined> {
 	const params = { TableName: tableName, Key: { id } };
 
-	return new Promise<Inventory>((res, rej) => {
+	return new Promise<IInventory>((res, rej) => {
 		database.get(params, (err, data) => {
 			if (err) {
 				rej(err);
 			} else {
-				res(data.Item as Inventory);
+				res(data.Item as IInventory);
 			}
 		});
 	});
 }
 
-export function createInventory(inventory: Inventory): Promise<void> {
+export function createInventory(inventory: IInventory): Promise<void> {
 	const params = { TableName: tableName, Item: inventory };
 
 	return new Promise((res, rej) => {
@@ -35,7 +35,7 @@ export function createInventory(inventory: Inventory): Promise<void> {
 	});
 }
 
-export function updateInventory({ id, orders }: Inventory): Promise<void> {
+export function updateInventory({ id, orders }: IInventory): Promise<void> {
 	const params = {
 		TableName: tableName,
 		Key: { id },
