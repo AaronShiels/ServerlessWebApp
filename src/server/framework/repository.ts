@@ -1,9 +1,7 @@
 import { DynamoDB } from "aws-sdk";
 import IInventory from "../../common/contracts/IInventory";
 
-const database = process.env.IS_OFFLINE
-	? new DynamoDB.DocumentClient({ region: "localhost", endpoint: "http://localhost:8000" })
-	: new DynamoDB.DocumentClient();
+const database = new DynamoDB.DocumentClient(process.env.IS_OFFLINE ? { region: "localhost", endpoint: "http://localhost:8000" } : undefined);
 
 const tableName: string = process.env.TABLE || "";
 

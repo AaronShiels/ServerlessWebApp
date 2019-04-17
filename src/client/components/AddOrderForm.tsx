@@ -1,6 +1,6 @@
 import * as React from "react";
 import IOrder from "../../common/contracts/IOrder";
-import guid from "../../common/utilities/guid";
+import { guid } from "../../common/utilities";
 
 interface IProps {
 	onOrderAdded: (order: IOrder) => void;

@@ -21,8 +21,60 @@
 	},
 	"package": { "include": "src/server/**", "exclude": "node_modules/**/*" },
 	"functions": {
-		"getInventory": { "handler": "src/server/handlers/getInventory.default", "events": [{ "http": "GET /inventories/{proxy+}" }] },
-		"updateInventory": { "handler": "src/server/handlers/updateInventory.default", "events": [{ "http": "POST /inventories/{proxy+}" }] }
+		"getInventory": {
+			"handler": "src/server/handlers/getInventory.default",
+			"events": [
+				{
+					"http": {
+						"method": "GET",
+						"path": "/inventories/{inventoryId}",
+						"request": {
+							"parameters": {
+								"paths": { "inventoryId": true }
+							}
+						}
+					}
+				}
+			]
+		},
+		"addInventory": {
+			"handler": "src/server/handlers/addInventory.default",
+			"events": [
+				{
+					"http": {
+						"method": "POST",
+						"path": "/inventories"
+					}
+				}
+			]
+		},
+		"addOrder": {
+			"handler": "src/server/handlers/addOrder.default",
+			"events": [
+				{
+					"http": {
+						"method": "POST",
+						"path": "/inventories/{inventoryId}/orders"
+					}
+				}
+			]
+		},
+		"removeOrder": {
+			"handler": "src/server/handlers/removeOrder.default",
+			"events": [
+				{
+					"http": {
+						"method": "DELETE",
+						"path": "/inventories/{inventoryId}/orders/{orderId}",
+						"request": {
+							"parameters": {
+								"paths": { "inventoryId": true, "orderId": true }
+							}
+						}
+					}
+				}
+			]
+		}
 	},
 	"resources": {
 		"Resources": {

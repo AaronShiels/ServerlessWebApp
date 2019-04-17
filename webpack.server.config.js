@@ -10,6 +10,7 @@ const config = {
 		filename: "[name].js",
 	},
 
+	optimization: { minimize: false },
 	devtool: "inline-source-map",
 
 	resolve: {

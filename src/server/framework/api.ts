@@ -1,11 +1,26 @@
 import * as Lambda from "aws-lambda";
 
+enum StatusCode {
+	Ok = 200,
+	Created = 201,
+	Accepted = 202,
+	NoContent = 203,
+	NotModified = 304,
+	BadRequest = 400,
+	Unauthorized = 401,
+	Forbidden = 403,
+	NotFound = 404,
+	Fuck = 500,
+}
+
 type ApiRequest = Lambda.APIGatewayProxyEvent;
 type ApiResponse = Lambda.APIGatewayProxyResult;
 type ApiContext = Lambda.APIGatewayEventRequestContext;
-export type ApiHandler = (req: ApiRequest, ctx: ApiContext) => Promise<ApiResponse>;
+type ApiHandler = (req: ApiRequest, ctx: ApiContext) => Promise<ApiResponse>;
 
-export function ok(payload?: object | string): ApiResponse {
+const parse = <T>(body: string) => JSON.parse(body) as T;
+
+const response = (statusCode: StatusCode, payload?: object | string): ApiResponse => {
 	let body: string = "";
 	if (typeof payload === "object") {
 		body = JSON.stringify(payload);
@@ -13,13 +28,7 @@ export function ok(payload?: object | string): ApiResponse {
 		body = payload;
 	}
 
-	return { statusCode: 200, body };
-}
+	return { statusCode: statusCode, body };
+};
 
-export function notFound(message?: string): ApiResponse {
-	return { statusCode: 404, body: message || "" };
-}
-
-export function badRequest(message?: string): ApiResponse {
-	return { statusCode: 400, body: message || "" };
-}
+export { ApiHandler, StatusCode, response, parse };

@@ -1,23 +1,16 @@
-import { ok, ApiHandler, badRequest } from "../framework/api";
-import { getInventory, createInventory } from "../framework/repository";
+import { ApiHandler, StatusCode, response } from "../framework/api";
+import { getInventory } from "../framework/repository";
 
 const handler: ApiHandler = async ({ pathParameters }) => {
-	if (!pathParameters || !pathParameters.proxy) {
-		return badRequest();
+	if (!pathParameters || !pathParameters.inventoryId || pathParameters.inventoryId != "demo") {
+		return response(StatusCode.BadRequest, "Missing parameters.");
 	}
 
-	if (pathParameters.proxy != "demo") {
-		return badRequest(); // Temporary
-	}
-
-	const inventory = await getInventory(pathParameters.proxy);
+	const inventory = await getInventory(pathParameters.inventoryId);
 	if (inventory) {
-		return ok(inventory);
+		return response(StatusCode.Ok, inventory);
 	} else {
-		const newInventory = { id: pathParameters.proxy, name: "Demo Inventory", orders: [] };
-		await createInventory(newInventory);
-
-		return ok(newInventory);
+		return response(StatusCode.NotFound);
 	}
 };
 

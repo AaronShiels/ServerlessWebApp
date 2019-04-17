@@ -2,10 +2,9 @@
 	"name": "serverlesswebapp",
 	"version": "1.0.0",
 	"scripts": {
-		"run:server:install": "sls dynamodb install",
+		"install:database": "sls dynamodb remove && sls dynamodb install",
 		"run:server": "sls offline start",
 		"run:client": "webpack-dev-server --config webpack.client.config.js --mode development",
-		"deploy:configure": "sls config credentials --provider aws --key $AWS_ACCESS_KEY --secret $AWS_ACCESS_SECRET",
 		"deploy:server": "sls deploy",
 		"deploy:client": "webpack --config webpack.client.config.js --mode production && sls client deploy --no-confirm"
 	},
