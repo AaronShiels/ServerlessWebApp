@@ -12,30 +12,30 @@
 	"license": "ISC",
 	"dependencies": {
 		"aws-lambda": "^0.1.2",
-		"aws-sdk": "^2.354.0",
+		"aws-sdk": "^2.444.0",
 		"bootstrap": "^4.3.1",
 		"copy-webpack-plugin": "^4.5.4",
 		"css-loader": "^1.0.0",
 		"path": "^0.12.7",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
-		"serverless": "^1.35.1",
+		"serverless": "^1.41.1",
 		"serverless-finch": "^2.3.2",
 		"serverless-webpack": "^5.2.0",
 		"style-loader": "^0.23.1",
-		"ts-loader": "^5.2.2",
+		"ts-loader": "^5.4.4",
 		"url-loader": "^1.1.2",
-		"webpack": "^4.21.0"
+		"webpack": "^4.30.0"
 	},
 	"devDependencies": {
 		"@types/aws-lambda": "^8.10.24",
-		"@types/node": "^10.14.4",
-		"@types/react": "^16.8.13",
+		"@types/node": "^10.14.6",
+		"@types/react": "^16.8.14",
 		"@types/react-dom": "^16.8.4",
 		"serverless-dynamodb-local": "^0.2.37",
 		"serverless-offline": "^3.33.0",
-		"typescript": "^3.4.3",
-		"webpack-cli": "^3.3.0",
+		"typescript": "^3.4.5",
+		"webpack-cli": "^3.3.1",
 		"webpack-dev-server": "^3.3.1"
 	}
 }
